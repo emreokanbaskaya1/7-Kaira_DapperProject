@@ -9,14 +9,19 @@ namespace KairaWebUI.Repositories.CategoryRepositories
     {
         private readonly IDbConnection _db = context.CreateConnection();
 
-        public Task CreateAsync(CreateCategoryDto categoryDto)
+        public async Task CreateAsync(CreateCategoryDto categoryDto)
         {
-            throw new NotImplementedException();
+            string query = "INSERT INTO categories (name) values (@Name)";
+            var parameters = new DynamicParameters(categoryDto);
+            await _db.ExecuteAsync(query, parameters);
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            string query = "Delete from categories where CategoryId = @CategoryId";
+            var parameters = new DynamicParameters();
+            parameters.Add("@CategoryId", id);
+            await _db.ExecuteAsync(query, parameters);
         }
 
         public async Task<IEnumerable<ResultCategoryDto>> GetAllAsync()
@@ -33,9 +38,12 @@ namespace KairaWebUI.Repositories.CategoryRepositories
             return await _db.QueryFirstOrDefaultAsync<UpdateCategoryDto>(query, parameters);
         }
 
-        public Task UpdateAsync(UpdateCategoryDto categoryDto)
+        public async Task UpdateAsync(UpdateCategoryDto categoryDto)
         {
-            throw new NotImplementedException();
+            var query = "UPDATE categories set name = @Name where CategoryId = @CategoryId";
+            var parameters = new DynamicParameters(categoryDto);
+            await _db.ExecuteAsync(query,parameters);
+
         }
     }
 }
