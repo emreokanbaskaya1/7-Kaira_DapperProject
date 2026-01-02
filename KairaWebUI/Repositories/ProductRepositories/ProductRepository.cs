@@ -15,24 +15,33 @@ namespace KairaWebUI.Repositories.ProductRepositories
             await _db.ExecuteAsync(query, parameters);
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            string query = "Delete from products where ProductId = @ProductId";
+            var parameters = new DynamicParameters();
+            parameters.Add("@ProductId", id);
+            await _db.ExecuteAsync(query, parameters);
         }
 
-        public Task<IEnumerable<ResultProductDto>> GetAllAsync()
+        public async Task<IEnumerable<ResultProductDto>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            string query = "SELECT p.name, c.name as categoryName, price, imageUrl, Description, productId FROM Products as p inner join categories as c on c.CategoryId=p.CategoryId";
+            return await _db.QueryAsync<ResultProductDto>(query);
         }
 
-        public Task<UpdateProductDto> GetByIdAsync(int id)
+        public async Task<UpdateProductDto> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            string query = "Select * from products where ProductId = @ProductId";
+            var parameters = new DynamicParameters();
+            parameters.Add("@ProductId", id);
+            return await _db.QueryFirstOrDefaultAsync<UpdateProductDto>(query, parameters);
         }
 
-        public Task UpdateAsync(UpdateProductDto productDto)
+        public async Task UpdateAsync(UpdateProductDto productDto)
         {
-            throw new NotImplementedException();
+            string query = "Update products set name=@Name, ImageUrl=@ImageUrl, Description=@Description, price=@Price, categoryId=@CategoryId where ProductId=@ProductId";
+            var parameters = new DynamicParameters(productDto);
+            await _db.ExecuteAsync(query, parameters);
         }
     }
 }
