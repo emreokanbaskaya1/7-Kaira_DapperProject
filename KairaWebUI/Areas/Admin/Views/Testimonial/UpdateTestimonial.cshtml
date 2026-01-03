@@ -1,0 +1,17 @@
+﻿@model UpdateTestimonialDto
+@{
+    ViewData["Title"] = "UpdateTestimonial";
+}
+
+<h3>Update Testimonial</h3>
+
+<form method="post">
+    <input type="hidden" asp-for="TestimonialId"/>
+    <label>Testimonial Name Surname</label>
+    <input type="text" asp-for="NameSurname" class="form-control" placeholder="Enter a Name Surname" />
+    <br />
+    <label>Testimonial Description</label>
+    <input type="text" asp-for="Comment" class="form-control" placeholder="Enter a Testimonial Description" />
+    <br />
+    <button class="btn btn-primary">Save</button>
+</form>

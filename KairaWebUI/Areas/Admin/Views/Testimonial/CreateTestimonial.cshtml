@@ -1,0 +1,17 @@
+﻿@model CreateTestimonialDto
+@{
+    ViewData["Title"] = "CreateTestimonial";
+}
+
+<h3>Create New Testimonial</h3>
+
+<form method="post">
+    <label>Testimonial Name Surname</label>
+    <input type="text" asp-for="NameSurname" class="form-control" placeholder="Enter a Name Surname" />
+    <br />
+    <label>Testimonial Description</label>
+    <input type="text" asp-for="Comment" class="form-control" placeholder="Enter a Testimonial Description"/>
+    <br />
+    <button class="btn btn-primary">Save</button>
+</form>
+

@@ -34,7 +34,7 @@ namespace KairaWebUI.Repositories.CollectionRepositories
             string query = "SELECT * FROM Collections where CollectionId = @CollectionId";
             var parameters = new DynamicParameters();
             parameters.Add("@CollectionId", id);
-            return await _db.QueryFirstOrDefault(query, parameters);
+            return await _db.QueryFirstOrDefaultAsync<UpdateCollectionDto>(query, parameters);
         }
 
         public async Task UpdateAsync(UpdateCollectionDto collectionDto)
