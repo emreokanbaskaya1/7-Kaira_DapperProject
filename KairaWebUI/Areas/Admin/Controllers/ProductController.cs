@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading.Tasks;
 
-namespace KairaWebUI.Controllers
+namespace KairaWebUI.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class ProductController(IProductRepository _productRepository,
                                    ICategoryRepository _categoryRepository) : Controller
     {

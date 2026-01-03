@@ -1,0 +1,36 @@
+﻿@model IEnumerable<ResultCollectionDto>
+@{
+    ViewData["Title"] = "Index";
+    int count = 0;
+}
+
+<h3>Collections</h3>
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>#</th>
+        <th>Image Url</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        count++;
+        <tr>
+            <th>@count</th>
+            <td>@item.ImageUrl</td>
+            <td>@item.Title</td>
+            <td>@item.Description</td>
+            <td>
+                <a href="/Admin/Collection/DeleteCollection/@item.CollectionId" class="btn btn-danger">Sil</a>
+                <a href="/Admin/Collection/UpdateCollection/@item.CollectionId" class="btn btn-info">Update</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+<a href="/Admin/Collection/CreateCollection/" class="btn btn-primary">Create New Collection</a>
+

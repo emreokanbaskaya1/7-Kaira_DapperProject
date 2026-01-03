@@ -2,8 +2,9 @@
 using KairaWebUI.Repositories.CategoryRepositories;
 using Microsoft.AspNetCore.Mvc;
 
-namespace KairaWebUI.Controllers
+namespace KairaWebUI.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController(ICategoryRepository _categoryRepository) : Controller
     {
         public async Task<IActionResult> Index()
