@@ -1,0 +1,154 @@
+@{
+    if (Model != null)
+    {
+        var pageIndex = (int)Model.GetType().GetProperty("PageIndex").GetValue(Model);
+        var pageSize = (int)Model.GetType().GetProperty("PageSize").GetValue(Model);
+        var totalPages = (int)Model.GetType().GetProperty("TotalPages").GetValue(Model);
+        var totalCount = (int)Model.GetType().GetProperty("TotalCount").GetValue(Model);
+        var hasPreviousPage = (bool)Model.GetType().GetProperty("HasPreviousPage").GetValue(Model);
+        var hasNextPage = (bool)Model.GetType().GetProperty("HasNextPage").GetValue(Model);
+
+        if (totalPages > 1)
+        {
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div class="pagination-info">
+                    <span class="text-muted">
+                        Showing <strong>@((pageIndex - 1) * pageSize + 1)</strong> to 
+                        <strong>@Math.Min(pageIndex * pageSize, totalCount)</strong> of 
+                        <strong>@totalCount</strong> entries
+                    </span>
+                </div>
+
+                <nav aria-label="Page navigation">
+                    <ul class="pagination mb-0">
+                        <!-- Previous Button -->
+                        <li class="page-item @(!hasPreviousPage ? "disabled" : "")">
+                            <a class="page-link" 
+                               href="?pageNumber=@(pageIndex - 1)&pageSize=@pageSize"
+                               aria-label="Previous">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+
+                        @{
+                            var startPage = Math.Max(1, pageIndex - 2);
+                            var endPage = Math.Min(totalPages, pageIndex + 2);
+                        }
+
+                        <!-- First Page -->
+                        @if (startPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="?pageNumber=1&pageSize=@pageSize">1</a>
+                            </li>
+                            if (startPage > 2)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                        }
+
+                        <!-- Page Numbers -->
+                        @for (var i = startPage; i <= endPage; i++)
+                        {
+                            <li class="page-item @(i == pageIndex ? "active" : "")">
+                                <a class="page-link" href="?pageNumber=@i&pageSize=@pageSize">@i</a>
+                            </li>
+                        }
+
+                        <!-- Last Page -->
+                        @if (endPage < totalPages)
+                        {
+                            if (endPage < totalPages - 1)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                            <li class="page-item">
+                                <a class="page-link" href="?pageNumber=@totalPages&pageSize=@pageSize">@totalPages</a>
+                            </li>
+                        }
+
+                        <!-- Next Button -->
+                        <li class="page-item @(!hasNextPage ? "disabled" : "")">
+                            <a class="page-link" 
+                               href="?pageNumber=@(pageIndex + 1)&pageSize=@pageSize"
+                               aria-label="Next">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Page Size Selector -->
+                <div class="page-size-selector">
+                    <select class="form-select form-select-sm" style="width: auto;" onchange="window.location.href='?pageNumber=1&pageSize=' + this.value">
+                        <option value="5" selected="@(pageSize == 5)">5 per page</option>
+                        <option value="10" selected="@(pageSize == 10)">10 per page</option>
+                        <option value="20" selected="@(pageSize == 20)">20 per page</option>
+                        <option value="50" selected="@(pageSize == 50)">50 per page</option>
+                    </select>
+                </div>
+            </div>
+
+            <style>
+                .pagination .page-link {
+                    color: var(--primary-color);
+                    border-color: #dee2e6;
+                    padding: 8px 14px;
+                    margin: 0 3px;
+                    border-radius: 6px;
+                    transition: all 0.3s;
+                }
+
+                .pagination .page-link:hover {
+                    background-color: var(--primary-color);
+                    color: #fff;
+                    border-color: var(--primary-color);
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 8px rgba(78, 115, 223, 0.3);
+                }
+
+                .pagination .page-item.active .page-link {
+                    background-color: var(--primary-color);
+                    border-color: var(--primary-color);
+                    color: #fff;
+                }
+
+                .pagination .page-item.disabled .page-link {
+                    background-color: #f8f9fc;
+                    border-color: #dee2e6;
+                    color: #6c757d;
+                }
+
+                .pagination-info {
+                    font-size: 0.9rem;
+                }
+
+                .page-size-selector select {
+                    border-color: #dee2e6;
+                    cursor: pointer;
+                }
+
+                .page-size-selector select:focus {
+                    border-color: var(--primary-color);
+                    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+                }
+
+                @@media (max-width: 768px) {
+                    .d-flex.justify-content-between {
+                        flex-direction: column;
+                        gap: 15px;
+                    }
+
+                    .pagination-info,
+                    .page-size-selector {
+                        text-align: center;
+                    }
+                }
+            </style>
+        }
+    }
+}

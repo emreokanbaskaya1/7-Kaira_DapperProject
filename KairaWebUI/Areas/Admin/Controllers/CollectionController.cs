@@ -1,21 +1,21 @@
 ﻿using KairaWebUI.DTOs.CollectionDtos;
+using KairaWebUI.Helpers;
 using KairaWebUI.Repositories.CollectionRepositories;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace KairaWebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class CollectionController(ICollectionRepository _collectionRepository) : Controller
     {
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
         {
             var collections = await _collectionRepository.GetAllAsync();
-            return View(collections);
+            var paginatedList = PaginatedList<ResultCollectionDto>.Create(collections, pageNumber, pageSize);
+            return View(paginatedList);
         }
 
-
-        public async Task<IActionResult> CreateCollection()
+        public IActionResult CreateCollection()
         {
             return View();
         }
@@ -45,10 +45,5 @@ namespace KairaWebUI.Areas.Admin.Controllers
             await _collectionRepository.DeleteAsync(id);
             return RedirectToAction("Index");
         }
-
-
-
-
-
     }
 }

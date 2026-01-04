@@ -1,4 +1,5 @@
 ﻿using KairaWebUI.DTOs.CategoryDtos;
+using KairaWebUI.Helpers;
 using KairaWebUI.Repositories.CategoryRepositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +8,11 @@ namespace KairaWebUI.Areas.Admin.Controllers
     [Area("Admin")]
     public class CategoryController(ICategoryRepository _categoryRepository) : Controller
     {
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
         {
             var categories = await _categoryRepository.GetAllAsync();
-            return View(categories);
+            var paginatedList = PaginatedList<ResultCategoryDto>.Create(categories, pageNumber, pageSize);
+            return View(paginatedList);
         }
 
         public IActionResult CreateCategory()

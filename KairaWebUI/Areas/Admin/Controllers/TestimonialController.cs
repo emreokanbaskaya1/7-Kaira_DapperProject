@@ -1,4 +1,5 @@
 ﻿using KairaWebUI.DTOs.TestimonialDtos;
+using KairaWebUI.Helpers;
 using KairaWebUI.Repositories.TestimonialRepositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +8,11 @@ namespace KairaWebUI.Areas.Admin.Controllers
     [Area("Admin")]
     public class TestimonialController(ITestimonialRepository _testimonialRepository) : Controller
     {
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
         {
             var testimonials = await _testimonialRepository.GetAllAsync();
-            return View(testimonials);
+            var paginatedList = PaginatedList<ResultTestimonialDto>.Create(testimonials, pageNumber, pageSize);
+            return View(paginatedList);
         }
 
 

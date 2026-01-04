@@ -1,4 +1,5 @@
 ﻿using KairaWebUI.DTOs.ProductDtos;
+using KairaWebUI.Helpers;
 using KairaWebUI.Repositories.CategoryRepositories;
 using KairaWebUI.Repositories.ProductRepositories;
 using Microsoft.AspNetCore.Mvc;
@@ -22,10 +23,11 @@ namespace KairaWebUI.Areas.Admin.Controllers
                                   }).ToList();
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
         {
             var products = await _productRepository.GetAllAsync();
-            return View(products);
+            var paginatedList = PaginatedList<ResultProductDto>.Create(products, pageNumber, pageSize);
+            return View(paginatedList);
         }
 
         public async Task<IActionResult> DeleteProduct(int id)
@@ -60,6 +62,5 @@ namespace KairaWebUI.Areas.Admin.Controllers
             await _productRepository.UpdateAsync(productDto);
             return RedirectToAction("Index");
         }
-
     }
 }

@@ -1,0 +1,17 @@
+@model UpdateVideoDto
+@{
+    ViewData["Title"] = "UpdateVideo";
+}
+
+<h3>Update Video</h3>
+
+<form method="post">
+    <input type="hidden" asp-for="VideoId" />
+    <label>Video URL</label>
+    <input type="text" asp-for="Url" class="form-control" placeholder="Enter Video URL"  />
+    <br />
+    <label>Background Image URL</label>
+    <input type="text" asp-for="BackgroundImageUrl" class="form-control" placeholder="Enter Background Image URL"  />
+    <br />
+    <button class="btn btn-primary">Save</button>
+</form>

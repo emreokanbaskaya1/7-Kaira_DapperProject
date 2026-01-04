@@ -1,0 +1,212 @@
+@model IEnumerable<ResultProductDto>
+
+<section id="new-arrival" class="new-arrival product-carousel py-5 position-relative overflow-hidden">
+    <div class="container">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mt-5 mb-3">
+            <h4 class="text-uppercase">Our Products</h4>
+            <a href="#" class="btn-link">View All Products</a>
+        </div>
+        <div class="swiper product-swiper open-up" data-aos="zoom-out">
+            <div class="swiper-wrapper d-flex">
+                @foreach (var product in Model)
+                {
+                    <div class="swiper-slide">
+                        <div class="product-item image-zoom-effect link-effect">
+                            <div class="image-holder position-relative">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#productModal@product.ProductId">
+                                    <img src="@product.ImageUrl" alt="@product.Name" class="product-image img-fluid">
+                                </a>
+                                <a href="#" class="btn-icon btn-wishlist">
+                                    <svg width="24" height="24" viewBox="0 0 24 24">
+                                        <use xlink:href="#heart"></use>
+                                    </svg>
+                                </a>
+                                <div class="product-content">
+                                    <h5 class="element-title text-uppercase fs-5 mt-3">
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#productModal@product.ProductId">@product.Name</a>
+                                    </h5>
+                                    <p class="small">@product.CategoryName</p>
+                                    <a href="#" class="text-decoration-none" data-after="Add to cart">
+                                        <span>$@string.Format("{0:F2}", product.Price)</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+        <div class="icon-arrow icon-arrow-left">
+            <svg width="50" height="50" viewBox="0 0 24 24">
+                <use xlink:href="#arrow-left"></use>
+            </svg>
+        </div>
+        <div class="icon-arrow icon-arrow-right">
+            <svg width="50" height="50" viewBox="0 0 24 24">
+                <use xlink:href="#arrow-right"></use>
+            </svg>
+        </div>
+    </div>
+</section>
+
+<!-- Product Modals -->
+@foreach (var product in Model)
+{
+    <div class="modal fade" id="productModal@product.ProductId" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="product-image-container">
+                                <img src="@product.ImageUrl" alt="@product.Name" class="img-fluid rounded">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="product-details">
+                                <span class="badge bg-primary mb-2">@product.CategoryName</span>
+                                <h2 class="product-title mb-3">@product.Name</h2>
+                                <p class="product-description text-muted mb-4">@product.Description</p>
+                                <div class="product-price mb-4">
+                                    <h3 class="text-success mb-0">$@string.Format("{0:F2}", product.Price)</h3>
+                                </div>
+                                <div class="product-actions d-flex gap-2">
+                                    <button class="btn btn-dark btn-lg flex-grow-1">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" class="me-2">
+                                            <use xlink:href="#cart"></use>
+                                        </svg>
+                                        Add to Cart
+                                    </button>
+                                    <button class="btn btn-outline-dark btn-lg">
+                                        <svg width="20" height="20" viewBox="0 0 24 24">
+                                            <use xlink:href="#heart"></use>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="product-info mt-4">
+                                    <div class="info-item d-flex align-items-center mb-2">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" class="me-2">
+                                            <use xlink:href="#check"></use>
+                                        </svg>
+                                        <span>In Stock</span>
+                                    </div>
+                                    <div class="info-item d-flex align-items-center mb-2">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" class="me-2">
+                                            <use xlink:href="#check"></use>
+                                        </svg>
+                                        <span>Free Shipping</span>
+                                    </div>
+                                    <div class="info-item d-flex align-items-center">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" class="me-2">
+                                            <use xlink:href="#check"></use>
+                                        </svg>
+                                        <span>30 Days Return Policy</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    .product-image-container {
+        overflow: hidden;
+        border-radius: 10px;
+        background: #f8f9fa;
+    }
+
+    .product-image-container img {
+        transition: transform 0.3s ease;
+    }
+
+    .product-image-container:hover img {
+        transform: scale(1.05);
+    }
+
+    .product-details {
+        padding: 20px;
+    }
+
+    .product-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #212529;
+    }
+
+    .product-description {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .product-price h3 {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .product-actions button {
+        padding: 12px 24px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .product-actions button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-info {
+        border-top: 1px solid #dee2e6;
+        padding-top: 20px;
+    }
+
+    .info-item {
+        color: #6c757d;
+        font-size: 0.95rem;
+    }
+
+    .info-item svg {
+        color: #28a745;
+    }
+
+    .modal-content {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-header {
+        padding: 1.5rem 1.5rem 0;
+    }
+
+    .modal-body {
+        padding: 2rem;
+    }
+
+    .badge {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+    }
+
+    @@media (max-width: 768px) {
+        .product-details {
+            padding: 10px 0;
+        }
+
+        .product-title {
+            font-size: 1.5rem;
+        }
+
+        .product-price h3 {
+            font-size: 1.75rem;
+        }
+    }
+</style>

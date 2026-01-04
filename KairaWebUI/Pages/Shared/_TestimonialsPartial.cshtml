@@ -1,0 +1,23 @@
+@model IEnumerable<ResultTestimonialDto>
+
+<section class="testimonials py-5 bg-light">
+    <div class="section-header text-center mt-5">
+        <h3 class="section-title">CUSTOMER REVIEWS</h3>
+    </div>
+    <div class="swiper testimonial-swiper overflow-hidden my-5">
+        <div class="swiper-wrapper d-flex">
+            @foreach (var testimonial in Model)
+            {
+                <div class="swiper-slide">
+                    <div class="testimonial-item text-center">
+                        <blockquote>
+                            <p>"@testimonial.Comment"</p>
+                            <div class="review-title text-uppercase">@testimonial.NameSurname</div>
+                        </blockquote>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="testimonial-swiper-pagination d-flex justify-content-center mb-5"></div>
+</section>

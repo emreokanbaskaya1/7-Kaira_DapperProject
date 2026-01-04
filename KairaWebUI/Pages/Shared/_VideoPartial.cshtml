@@ -1,0 +1,246 @@
+@model IEnumerable<ResultVideoDto>
+
+@if (Model != null && Model.Any())
+{
+    var firstVideo = Model.FirstOrDefault();
+    if (firstVideo != null && !string.IsNullOrEmpty(firstVideo.Url))
+    {
+        var videoUrl = firstVideo.Url;
+        var backgroundImage = firstVideo.BackgroundImageUrl;
+        var videoId = "";
+        
+        // YouTube video ID çýkar
+        try
+        {
+            if (videoUrl.Contains("youtube.com/watch?v="))
+            {
+                var uri = new Uri(videoUrl);
+                var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+                videoId = query["v"];
+            }
+            else if (videoUrl.Contains("youtu.be/"))
+            {
+                var uri = new Uri(videoUrl);
+                videoId = uri.AbsolutePath.TrimStart('/');
+            }
+            else if (videoUrl.Contains("youtube.com/embed/"))
+            {
+                videoId = videoUrl.Split("/embed/")[1].Split("?")[0];
+            }
+        }
+        catch { }
+        
+        // Eðer background image yoksa, YouTube thumbnail kullan
+        if (string.IsNullOrEmpty(backgroundImage) && !string.IsNullOrEmpty(videoId))
+        {
+            backgroundImage = $"https://img.youtube.com/vi/{videoId}/maxresdefault.jpg";
+        }
+
+        // Eðer hala background image yoksa, default kullan
+        if (string.IsNullOrEmpty(backgroundImage))
+        {
+            backgroundImage = "~/kaira-1.0.0/images/video-image.jpg";
+        }
+
+        <section class="video py-5 overflow-hidden">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="video-content open-up" data-aos="zoom-out">
+                        <div class="video-bg">
+                            <img src="@backgroundImage" alt="video" class="video-image img-fluid" 
+                                 onerror="this.src='/kaira-1.0.0/images/video-image.jpg'">
+                        </div>
+                        <div class="video-player">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#videoModal" class="youtube">
+                                <svg width="24" height="24" viewBox="0 0 24 24">
+                                    <use xlink:href="#play"></use>
+                                </svg>
+                                <img src="~/kaira-1.0.0/images/text-pattern.png" alt="pattern" class="text-rotate">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Modal -->
+        <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="true">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content" style="background: rgba(0, 0, 0, 0.95); border: none;">
+                    <div class="modal-body p-0 d-flex align-items-center justify-content-center position-relative">
+                        <!-- Close Button -->
+                        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" 
+                                data-bs-dismiss="modal" aria-label="Close" style="z-index: 10000;"></button>
+                        
+                        <!-- Video Container -->
+                        @if (!string.IsNullOrEmpty(videoId))
+                        {
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-12 col-lg-10 col-xl-8">
+                                        <div class="ratio ratio-16x9">
+                                            <iframe id="youtubePlayer" 
+                                                    src="about:blank"
+                                                    data-src="https://www.youtube.com/embed/@videoId?autoplay=1&rel=0" 
+                                                    title="YouTube video player" 
+                                                    frameborder="0" 
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                    allowfullscreen
+                                                    style="border-radius: 10px;"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="p-5 text-center text-white">
+                                <i style="font-size: 3rem;">??</i>
+                                <p class="mt-3">Invalid YouTube URL</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            /* Video modal tam ekran ve en üstte */
+            #videoModal {
+                z-index: 99999 !important;
+            }
+            
+            #videoModal .modal-backdrop {
+                z-index: 99998 !important;
+                background-color: rgba(0, 0, 0, 0.95) !important;
+            }
+            
+            .modal-backdrop.show {
+                z-index: 99998 !important;
+                opacity: 1 !important;
+            }
+
+            /* Modal açýkken body scroll'u engelle */
+            body.modal-open {
+                overflow: hidden !important;
+            }
+
+            /* Kapatma butonu */
+            #videoModal .btn-close {
+                opacity: 0.8;
+                padding: 1rem;
+                background-size: 1.5rem;
+            }
+
+            #videoModal .btn-close:hover {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        </style>
+
+        <script>
+            // Modal açýlýnca videoyu yükle ve diðer modal'larý kapat
+            document.addEventListener('DOMContentLoaded', function() {
+                var videoModal = document.getElementById('videoModal');
+                var iframe = document.getElementById('youtubePlayer');
+                
+                if (videoModal && iframe) {
+                    videoModal.addEventListener('show.bs.modal', function () {
+                        // Tüm açýk modal'larý kapat
+                        var openModals = document.querySelectorAll('.modal.show');
+                        openModals.forEach(function(modal) {
+                            if (modal.id !== 'videoModal') {
+                                var bsModal = bootstrap.Modal.getInstance(modal);
+                                if (bsModal) {
+                                    bsModal.hide();
+                                }
+                            }
+                        });
+
+                        // Tüm offcanvas'larý kapat
+                        var openOffcanvas = document.querySelectorAll('.offcanvas.show');
+                        openOffcanvas.forEach(function(offcanvas) {
+                            var bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvas);
+                            if (bsOffcanvas) {
+                                bsOffcanvas.hide();
+                            }
+                        });
+
+                        // Tüm backdrop'larý temizle
+                        setTimeout(function() {
+                            var backdrops = document.querySelectorAll('.modal-backdrop');
+                            backdrops.forEach(function(backdrop, index) {
+                                if (index < backdrops.length - 1) {
+                                    backdrop.remove();
+                                }
+                            });
+                        }, 100);
+                        
+                        // Video src'yi yükle
+                        var src = iframe.getAttribute('data-src');
+                        iframe.src = src;
+                    });
+                    
+                    videoModal.addEventListener('hidden.bs.modal', function () {
+                        // Modal kapanýnca videoyu durdur
+                        iframe.src = 'about:blank';
+                        
+                        // TÜM backdrop'larý kaldýr
+                        setTimeout(function() {
+                            var backdrops = document.querySelectorAll('.modal-backdrop, .offcanvas-backdrop');
+                            backdrops.forEach(function(backdrop) {
+                                backdrop.remove();
+                            });
+                            
+                            // TÜM offcanvas'larý zorla kapat
+                            var allOffcanvas = document.querySelectorAll('.offcanvas');
+                            allOffcanvas.forEach(function(offcanvas) {
+                                offcanvas.classList.remove('show');
+                                offcanvas.style.visibility = '';
+                                offcanvas.setAttribute('aria-hidden', 'true');
+                                offcanvas.removeAttribute('aria-modal');
+                                offcanvas.removeAttribute('role');
+                            });
+                            
+                            // TÜM modal'larý zorla kapat
+                            var allModals = document.querySelectorAll('.modal');
+                            allModals.forEach(function(modal) {
+                                if (modal.id !== 'videoModal') {
+                                    modal.classList.remove('show');
+                                    modal.style.display = 'none';
+                                    modal.setAttribute('aria-hidden', 'true');
+                                    modal.removeAttribute('aria-modal');
+                                }
+                            });
+                            
+                            // Body'den tüm modal/offcanvas class'larýný temizle
+                            document.body.classList.remove('modal-open', 'offcanvas-open');
+                            document.body.style.overflow = '';
+                            document.body.style.paddingRight = '';
+                        }, 300);
+                    });
+                }
+            });
+        </script>
+    }
+}
+else
+{
+    <!-- Video verisi yok -->
+    <section class="video py-5 overflow-hidden">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="video-content open-up" data-aos="zoom-out">
+                    <div class="video-bg">
+                        <img src="~/kaira-1.0.0/images/video-image.jpg" alt="video placeholder" class="video-image img-fluid">
+                    </div>
+                    <div class="video-player">
+                        <div class="text-center text-white p-5">
+                            <p class="mt-3">No video available</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}

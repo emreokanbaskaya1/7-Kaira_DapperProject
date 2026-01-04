@@ -1,0 +1,16 @@
+@model CreateVideoDto
+@{
+    ViewData["Title"] = "CreateVideo";
+}
+
+<h3>Create New Video</h3>
+
+<form method="post">
+    <label>Video URL</label>
+    <input type="text" asp-for="Url" class="form-control" placeholder="Enter Video URL"  />
+    <br />
+    <label>Background Image URL</label>
+    <input type="text" asp-for="BackgroundImageUrl" class="form-control" placeholder="Enter Background Image URL"  />
+    <br />
+    <button class="btn btn-primary">Save</button>
+</form>
