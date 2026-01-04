@@ -117,6 +117,29 @@
 }
 
 <style>
+    /* Ürün görselleri ayný boyutta */
+    .product-item .image-holder {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        overflow: hidden;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .product-item .image-holder a {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .product-item .product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
     .product-image-container {
         overflow: hidden;
         border-radius: 10px;
@@ -196,17 +219,6 @@
         font-weight: 600;
     }
 
-    @@media (max-width: 768px) {
-        .product-details {
-            padding: 10px 0;
-        }
-
-        .product-title {
-            font-size: 1.5rem;
-        }
-
-        .product-price h3 {
-            font-size: 1.75rem;
-        }
+    
     }
 </style>

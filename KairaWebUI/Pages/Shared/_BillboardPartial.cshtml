@@ -17,7 +17,7 @@
                             <div class="banner-item image-zoom-effect">
                                 <div class="image-holder">
                                     <a href="#">
-                                        <img src="@collection.ImageUrl" alt="@collection.Title" class="img-fluid">
+                                        <img src="@collection.ImageUrl" alt="@collection.Title" class="img-fluid collection-image">
                                     </a>
                                 </div>
                                 <div class="banner-content py-4">
@@ -48,3 +48,55 @@
         </div>
     </div>
 </section>
+
+<style>
+    /* Collection resimleri için sabit boyut */
+    .banner-item .image-holder {
+        width: 100%;
+        height: 600px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .banner-item .collection-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    /* Responsive boyutlar */
+    @@media (max-width: 1200px) {
+        .banner-item .image-holder {
+            height: 500px;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .banner-item .image-holder {
+            height: 400px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .banner-item .image-holder {
+            height: 350px;
+        }
+    }
+
+    /* Zoom efekti için düzeltme */
+    .image-zoom-effect .image-holder a {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .image-zoom-effect:hover .collection-image {
+        transform: scale(1.05);
+        transition: transform 0.5s ease;
+    }
+
+    .collection-image {
+        transition: transform 0.5s ease;
+    }
+</style>

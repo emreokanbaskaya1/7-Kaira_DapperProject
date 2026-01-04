@@ -43,20 +43,22 @@
         }
 
         <section class="video py-5 overflow-hidden">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="video-content open-up" data-aos="zoom-out">
-                        <div class="video-bg">
-                            <img src="@backgroundImage" alt="video" class="video-image img-fluid" 
-                                 onerror="this.src='/kaira-1.0.0/images/video-image.jpg'">
-                        </div>
-                        <div class="video-player">
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#videoModal" class="youtube">
-                                <svg width="24" height="24" viewBox="0 0 24 24">
-                                    <use xlink:href="#play"></use>
-                                </svg>
-                                <img src="~/kaira-1.0.0/images/text-pattern.png" alt="pattern" class="text-rotate">
-                            </a>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                        <div class="video-content open-up" data-aos="zoom-out">
+                            <div class="video-bg">
+                                <img src="@backgroundImage" alt="video" class="video-image img-fluid" 
+                                     onerror="this.src='/kaira-1.0.0/images/video-image.jpg'">
+                            </div>
+                            <div class="video-player">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#videoModal" class="youtube">
+                                    <svg width="24" height="24" viewBox="0 0 24 24">
+                                        <use xlink:href="#play"></use>
+                                    </svg>
+                                    <img src="~/kaira-1.0.0/images/text-pattern.png" alt="pattern" class="text-rotate">
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -228,15 +230,17 @@ else
 {
     <!-- Video verisi yok -->
     <section class="video py-5 overflow-hidden">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="video-content open-up" data-aos="zoom-out">
-                    <div class="video-bg">
-                        <img src="~/kaira-1.0.0/images/video-image.jpg" alt="video placeholder" class="video-image img-fluid">
-                    </div>
-                    <div class="video-player">
-                        <div class="text-center text-white p-5">
-                            <p class="mt-3">No video available</p>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="video-content open-up" data-aos="zoom-out">
+                        <div class="video-bg">
+                            <img src="~/kaira-1.0.0/images/video-image.jpg" alt="video placeholder" class="video-image img-fluid">
+                        </div>
+                        <div class="video-player">
+                            <div class="text-center text-white p-5">
+                                <p class="mt-3">No video available</p>
+                            </div>
                         </div>
                     </div>
                 </div>
