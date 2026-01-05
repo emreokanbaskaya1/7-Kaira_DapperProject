@@ -11,7 +11,8 @@ A modern, feature-rich fashion e-commerce platform built with ASP.NET Core MVC a
 
 
 
-https://github.com/user-attachments/assets/b6b7845b-bb9b-417f-a869-88f7c85bf5c9
+
+https://github.com/user-attachments/assets/02579bc2-702d-4985-99cf-87105d01eebc
 
 
 
