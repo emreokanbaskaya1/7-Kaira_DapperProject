@@ -8,6 +8,15 @@
 
 A modern, feature-rich fashion e-commerce platform built with ASP.NET Core MVC and Dapper ORM, featuring an AI-powered outfit suggestion assistant.
 
+
+
+
+https://github.com/user-attachments/assets/b6b7845b-bb9b-417f-a869-88f7c85bf5c9
+
+
+
+
+
 ## ✨ Features
 
 ### 🎨 Frontend Features
