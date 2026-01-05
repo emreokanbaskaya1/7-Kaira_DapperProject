@@ -1,4 +1,4 @@
-@{
+﻿@{
     ViewData["Title"] = "Home";
 }
 
@@ -45,18 +45,118 @@
 
 @await Component.InvokeAsync("Testimonials")
 
-<section class="newsletter bg-light" style="background: url(~/kaira-1.0.0/images/pattern-bg.png) no-repeat;">
+<section class="newsletter bg-light py-5">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8 py-5 my-5">
-                <div class="subscribe-header text-center pb-3">
-                    <h3 class="section-title text-uppercase">Sign Up for our newsletter</h3>
+            <div class="col-md-8 py-5">
+                <div class="text-center mb-4">
+                    <h3 class="section-title text-uppercase">OUTFIT SUGGESTION ASSISTANT</h3>
                 </div>
-                <form id="form" class="d-flex flex-wrap gap-2">
-                    <input type="text" name="email" placeholder="Your Email Address" class="form-control form-control-lg">
-                    <button class="btn btn-dark btn-lg text-uppercase w-100">Sign Up</button>
-                </form>
+                <div class="card shadow">
+                    <div class="card-body p-4">
+                        <form id="outfitForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Season</label>
+                                    <select class="form-select" id="season" required>
+                                        <option value="">Select...</option>
+                                        <option value="İlkbahar">🌸 Spring</option>
+                                        <option value="Yaz">☀️ Summer</option>
+                                        <option value="Sonbahar">🍂 Autumn</option>
+                                        <option value="Kış">❄️ Winter</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Occasion</label>
+                                    <select class="form-select" id="occasion" required>
+                                        <option value="">Select...</option>
+                                        <option value="İş">💼 Business</option>
+                                        <option value="Günlük">👕 Casual</option>
+                                        <option value="Spor">⚽ Sport</option>
+                                        <option value="Özel Davet">🎉 Special Event</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-dark w-100 mt-3">
+                                <span id="btnText">Get Suggestion</span>
+                                <span id="btnLoading" class="d-none spinner-border spinner-border-sm"></span>
+                            </button>
+                        </form>
+                        <div id="result" class="mt-4 d-none">
+                            <div class="alert alert-info">
+                                <h6 class="mb-3">💡 AI Suggestion:</h6>
+                                <div id="suggestion"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+document.getElementById('outfitForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const season = document.getElementById('season').value;
+    const occasion = document.getElementById('occasion').value;
+    const btnText = document.getElementById('btnText');
+    const btnLoading = document.getElementById('btnLoading');
+    const result = document.getElementById('result');
+    const suggestion = document.getElementById('suggestion');
+    
+    btnText.classList.add('d-none');
+    btnLoading.classList.remove('d-none');
+    
+    try {
+        const response = await fetch('@Url.Action("GetOutfitSuggestion", "Home")', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `season=${season}&occasion=${occasion}`
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // AI önerisini liste formatında göster
+            const text = data.suggestion;
+            let formattedHtml = '<ul class="list-unstyled mb-0" style="line-height: 1.8;">';
+            
+            // Satırlara böl
+            const lines = text.split(/\n+/).filter(line => line.trim() !== '');
+            
+            lines.forEach(line => {
+                const trimmedLine = line.trim();
+                if (trimmedLine) {
+                    // Başlıkları tespit et (Top:, Bottom: gibi)
+                    if (trimmedLine.includes(':') && trimmedLine.length < 50) {
+                        formattedHtml += `<li class="mb-2 mt-3"><strong>${trimmedLine}</strong></li>`;
+                    } else {
+                        // Normal satırlar - başındaki işaretleri temizle
+                        let cleanLine = trimmedLine
+                            .replace(/^[-*•]\s*/, '')
+                            .replace(/^\d+\.\s*/, '')
+                            .replace(/^[a-z]\)\s*/i, '');
+                        
+                        if (cleanLine) {
+                            formattedHtml += `<li class="mb-2 ms-3">✓ ${cleanLine}</li>`;
+                        }
+                    }
+                }
+            });
+            
+            formattedHtml += '</ul>';
+            suggestion.innerHTML = formattedHtml;
+            result.classList.remove('d-none');
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        alert('An error occurred!');
+    } finally {
+        btnText.classList.remove('d-none');
+        btnLoading.classList.add('d-none');
+    }
+});
+</script>
